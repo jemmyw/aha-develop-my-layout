@@ -1,0 +1,44 @@
+{
+  "name": "kealabs.my-layout",
+  "description": "My Layout",
+  "version": "0.0.0",
+  "author": "kealabs",
+  "repository": {
+    "type": "git",
+    "url": "TODO: Add the GitHub URL to your extension in package.json"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/react": "^17.0.40"
+  },
+  "ahaExtension": {
+    "contributes": {
+      "views": {
+        "myLayout": {
+          "title": "My layout",
+          "entryPoint": "src/views/myLayout.tsx",
+          "host": "page",
+          "location": {
+            "menu": "Work"
+          }
+        },
+        "myLayoutField": {
+          "title": "My layout field",
+          "entryPoint": "src/views/myLayoutField.tsx",
+          "host": "attribute",
+          "recordTypes": [
+            "Feature",
+            "Requirement",
+            "Epic",
+            "Release"
+          ]
+        }
+      }
+    }
+  },
+  "dependencies": {
+    "@types/lodash": "^4.14.179",
+    "lodash": "^4.17.21",
+    "recoil": "^0.6.1"
+  }
+}
