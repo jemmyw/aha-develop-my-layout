@@ -1,11 +1,12 @@
 {
   "name": "kealabs.my-layout",
   "description": "My Layout",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "author": "kealabs",
+  "homepage": "https://github.com/jemmyw/aha-develop-my-layout",
   "repository": {
     "type": "git",
-    "url": "TODO: Add the GitHub URL to your extension in package.json"
+    "url": "https://github.com/jemmyw/aha-develop-my-layout"
   },
   "license": "MIT",
   "devDependencies": {
