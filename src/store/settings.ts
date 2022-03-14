@@ -15,20 +15,14 @@ const fieldEffect =
     });
   };
 
-export const removeAttributesState = atom<string[]>({
-  key: "removeAttributesState",
-  default: [],
-  effects: [fieldEffect("removeAttributes", [])],
-});
+const stringArrayState = (name) =>
+  atom<string[]>({
+    key: `${name}State`,
+    default: [],
+    effects: [fieldEffect(name, [])],
+  });
 
-export const raiseAttributesState = atom<string[]>({
-  key: "raiseAttributesState",
-  default: [],
-  effects: [fieldEffect("raiseAttributes", [])],
-});
-
-export const addExtensionsState = atom<string[]>({
-  key: "addExtensionsState",
-  default: [],
-  effects: [fieldEffect("addExtensions", [])],
-});
+export const removeAttributesState = stringArrayState("removeAttributes");
+export const raiseAttributesState = stringArrayState("raiseAttributes");
+export const addExtensionsState = stringArrayState("addExtensions");
+export const lowerAttributesState = stringArrayState("lowerAttributes");

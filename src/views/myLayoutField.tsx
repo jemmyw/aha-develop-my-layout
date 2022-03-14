@@ -9,6 +9,17 @@ aha.on(
   }
 );
 
+interface ExtensionDetails {
+  identifier: string;
+}
+
+interface Fields {
+  removeAttributes?: string[];
+  raiseAttributes?: string[];
+  lowerAttributes?: string[];
+  addExtensions?: string[];
+}
+
 const getFields = async () => {
   const fields = await aha.user.getExtensionFields(IDENTIFIER);
   return fields as Aha.ExtensionField[];
@@ -24,10 +35,6 @@ const mapFields = (fields: Aha.ExtensionField[]) => {
 const getDrawer = () => document.querySelector(".drawer");
 
 const customizeDrawer = () => {};
-
-interface ExtensionDetails {
-  identifier: string;
-}
 
 const createExtensionField = async (
   details: ExtensionDetails,
@@ -97,6 +104,7 @@ const createExtensionField = async (
 const drawerChange = (mutations: MutationRecord[]) => {
   const removeAttributes = fields.removeAttributes || [];
   const raiseAttributes = fields.raiseAttributes || [];
+  const lowerAttributes = fields.lowerAttributes || [];
   const addExtensions = fields.addExtensions || [];
 
   mutations.forEach((mutation) => {
@@ -111,10 +119,12 @@ const drawerChange = (mutations: MutationRecord[]) => {
               ".attribute__name--inner"
             )?.textContent;
 
-            if (removeAttributes.includes(title)) {
+            if (removeAttributes.includes(title) || title.trim() === "") {
               row.remove();
             } else if (raiseAttributes.includes(title)) {
               table.prepend(row);
+            } else if (lowerAttributes.includes(title)) {
+              table.appendChild(row);
             }
           });
 
@@ -135,11 +145,7 @@ const drawerChange = (mutations: MutationRecord[]) => {
 };
 
 let drawerMutation = new MutationObserver(drawerChange);
-let fields = {} as {
-  removeAttributes: string[];
-  raiseAttributes: string[];
-  addExtensions: string[];
-};
+let fields = {} as Fields;
 
 const initialize = async () => {
   if (window.drawerMutation) {

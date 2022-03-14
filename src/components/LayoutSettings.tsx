@@ -1,58 +1,48 @@
 import { debounce } from "lodash";
 import React from "react";
-import { useRecoilState } from "recoil";
+import { RecoilState, useRecoilState } from "recoil";
 import {
   addExtensionsState,
+  lowerAttributesState,
   raiseAttributesState,
   removeAttributesState,
 } from "../store/settings";
 
-export const LayoutSettings = () => {
-  const [removeAttributes, setRemoveAttributes] = useRecoilState(
-    removeAttributesState
-  );
-  const [raiseAttributes, setRaiseAttributes] =
-    useRecoilState(raiseAttributesState);
-  const [addExtensions, setAddExtensions] = useRecoilState(addExtensionsState);
+const ArraySetting = ({
+  label,
+  state,
+}: {
+  label: string;
+  state: RecoilState<string[]>;
+}) => {
+  const [attribute, setAttribute] = useRecoilState(state);
+  const list = attribute.join("\n");
 
-  const setHandler = (setter) => {
-    const deSetter = debounce(setter, 1000);
-    return (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-      const list = event.target.value
-        .split("\n")
-        .map((v) => v.replace("\n", ""))
-        .filter((v) => v.length > 0);
-      deSetter(list);
-    };
+  const debouncedSetter = debounce(setAttribute, 250);
+
+  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const list = event.target.value
+      .split("\n")
+      .map((v) => v.replace("\n", ""))
+      .filter((v) => v.length > 0);
+    debouncedSetter(list);
   };
-
-  const removeAttributesList = removeAttributes.join("\n");
-  const raiseAttributesList = raiseAttributes.join("\n");
-  const addExtensionsList = addExtensions.join("\n");
 
   return (
     <div>
-      <div>
-        <div>Fields to remove</div>
-        <textarea
-          value={removeAttributesList}
-          onChange={setHandler(setRemoveAttributes)}
-        ></textarea>
-      </div>
-      <div>
-        <div>Fields to raise</div>
-        <textarea
-          value={raiseAttributesList}
-          onChange={setHandler(setRaiseAttributes)}
-        />
-      </div>
-      <div>
-        <div>Extensions to add</div>
-        <textarea
-          value={addExtensionsList}
-          onChange={setHandler(setAddExtensions)}
-        />
-      </div>
+      <div>{label}</div>
+      <textarea value={list} onChange={handleChange} />
+    </div>
+  );
+};
+
+export const LayoutSettings = () => {
+  return (
+    <div>
+      <ArraySetting label="Fields to remove" state={removeAttributesState} />
+      <ArraySetting label="Fields to raise" state={raiseAttributesState} />
+      <ArraySetting label="Fields to lower" state={lowerAttributesState} />
+      <ArraySetting label="Extensions to add" state={addExtensionsState} />
     </div>
   );
 };
